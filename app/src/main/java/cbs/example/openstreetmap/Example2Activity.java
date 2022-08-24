@@ -3,10 +3,12 @@ package cbs.example.openstreetmap;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
@@ -14,23 +16,22 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.compass.CompassOverlay;
-import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
+import org.osmdroid.views.overlay.MinimapOverlay;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-public class MainActivity extends AppCompatActivity {
+public class Example2Activity extends AppCompatActivity {
     private MapView mapView;
     private IMapController mapController;
-    private static final String TAG = "OsmActivity";
-    private static final int PERMISSION_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        Configuration.getInstance().setUserAgentValue("github-glenn1wang-myapp");
+        setContentView(R.layout.activity_basic);
 
         mapView = findViewById(R.id.mapView);
 
@@ -61,13 +62,32 @@ public class MainActivity extends AppCompatActivity {
         rotationGestureOverlay.setEnabled(true);
         mapView.getOverlays().add(rotationGestureOverlay);
 
-        CompassOverlay compassOverlay = new CompassOverlay(getApplicationContext(), new InternalCompassOrientationProvider(getApplicationContext()), mapView);
+        /*InternalCompassOrientationProvider internalCompassOrientationProvider = new InternalCompassOrientationProvider(getApplicationContext());
+        CompassOverlay compassOverlay = new CompassOverlay(getApplicationContext(), internalCompassOrientationProvider, mapView);
         compassOverlay.enableCompass();
-        mapView.getOverlays().add(compassOverlay);
+        mapView.getOverlays().add(compassOverlay);*/
+
+        /*CompassOverlay compassOverlay = new CompassOverlay(getApplicationContext(), mapView);
+        compassOverlay.setPointerMode(false);
+        compassOverlay.enableCompass();
+        mapView.getOverlayManager().add(compassOverlay);
+        mapView.invalidate();*/
 
         MyLocationNewOverlay myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()), mapView);
         myLocationNewOverlay.enableMyLocation();
         mapView.getOverlays().add(myLocationNewOverlay);
+
+        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+        ScaleBarOverlay scaleBarOverlay = new ScaleBarOverlay(mapView);
+        scaleBarOverlay.setCentred(true);
+        scaleBarOverlay.setScaleBarOffset(displayMetrics.widthPixels/2, 10);
+        mapView.getOverlays().add(scaleBarOverlay);
+
+        MinimapOverlay minimapOverlay = new MinimapOverlay(getApplicationContext(), mapView.getTileRequestCompleteHandler());
+        minimapOverlay.setWidth(displayMetrics.widthPixels/5);
+        minimapOverlay.setHeight(displayMetrics.heightPixels/5);
+        minimapOverlay.setTileSource(TileSourceFactory.WIKIMEDIA);
+        mapView.getOverlays().add(minimapOverlay);
     }
 
     private MapListener mapListener = new MapListener() {
@@ -95,8 +115,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         if (mapView != null)
@@ -105,13 +123,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().save(this, prefs);
         if (mapView != null)
             mapView.onPause();  //needed for compass, my location overlays, v6.0.0 and up
     }
 }
-
-//https://osmdroid.github.io/osmdroid/Markers,-Lines-and-Polygons.html

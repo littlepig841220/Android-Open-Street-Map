@@ -19,17 +19,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Long Click on button to show more information"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:stretchColumns="*"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/textView4">
 
         <TableRow
             android:layout_width="match_parent"
@@ -43,7 +52,8 @@
                 android:layout_weight="1"
                 android:enabled="true"
                 android:onClick="onClick"
-                android:text="Basic" />
+                android:text="Basic"
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/button2"
@@ -52,7 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onClick"
-                android:text="example 1" />
+                android:text="Example 1"
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/button3"
@@ -60,9 +71,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:enabled="false"
+                android:enabled="true"
                 android:onClick="onClick"
-                android:text="button" />
+                android:text="Example 2"
+                android:textAllCaps="false" />
         </TableRow>
 
         <TableRow
@@ -75,9 +87,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:enabled="false"
+                android:enabled="true"
                 android:onClick="onClick"
-                android:text="button" />
+                android:text="Example 3"
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/button5"
@@ -101,5 +114,29 @@
         </TableRow>
 
     </TableLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="24dp"
+        android:inputType="textMultiLine|text"
+        android:lineSpacingExtra="4sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:text="text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
