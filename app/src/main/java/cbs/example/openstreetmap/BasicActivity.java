@@ -10,7 +10,6 @@ import org.osmdroid.views.MapView;
 
 public class BasicActivity extends AppCompatActivity {
     private MapView mapView;
-    private IMapController mapController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +20,7 @@ public class BasicActivity extends AppCompatActivity {
 
         mapView.setTileSource(TileSourceFactory.MAPNIK);
 
-        mapController = mapView.getController();
+        IMapController mapController = mapView.getController();
         mapController.setZoom(5.0d);//數字越小地圖越小19
     }
 

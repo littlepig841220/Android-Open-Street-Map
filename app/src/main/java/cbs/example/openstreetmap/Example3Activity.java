@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.osmdroid.api.IGeoPoint;
@@ -37,9 +38,11 @@ import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme;
 import java.util.ArrayList;
 import java.util.List;
 
+import cbs.example.openstreetmap.tool.APIMethod;
+
 public class Example3Activity extends AppCompatActivity {
     private MapView mapView;
-    private IMapController mapController;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +51,19 @@ public class Example3Activity extends AppCompatActivity {
         setContentView(R.layout.activity_basic);
 
         mapView = findViewById(R.id.mapView);
-
-        mapView.setTileSource(TileSourceFactory.MAPNIK);
-        mapView.setVerticalMapRepetitionEnabled(false);
-        mapView.setScrollableAreaLimitLatitude(89.9d,-89.9d,0);//45
-        mapView.setMultiTouchControls(true);
-        mapView.setMaxZoomLevel(22.0d);
-        mapView.setMinZoomLevel(3.28d);
-        mapView.addMapListener(mapListener);
-
-        mapController = mapView.getController();
-        mapController.setZoom(19.0d);//數字越小地圖越小19
+        textView = findViewById(R.id.textView5);
 
         GeoPoint startPoint = new GeoPoint(25.05397, 121.47309);
-        mapController.setCenter(startPoint);
+        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+
+        APIMethod apiMethod = new APIMethod(mapView);
+        apiMethod.setMapView();
+        apiMethod.mapController(startPoint);
+        apiMethod.rotationGestureOverlay(getApplicationContext());
+        apiMethod.latLonGridlineOverlay2();
+        apiMethod.myLocationNewOverlay(getApplicationContext(), textView);
+        apiMethod.scaleBarOverlay(displayMetrics);
+        apiMethod.minimapOverlay(getApplicationContext(), displayMetrics);
 
         Marker marker = new Marker(mapView);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -72,41 +74,6 @@ public class Example3Activity extends AppCompatActivity {
         marker.setImage(getResources().getDrawable(R.drawable.ic_launcher_background, null));
         //marker.setTextIcon("test");
         mapView.getOverlays().add(marker);
-
-        LatLonGridlineOverlay2 latLonGridlineOverlay2 = new LatLonGridlineOverlay2();
-        latLonGridlineOverlay2.setFontSizeDp(Short.parseShort("0"));
-        mapView.getOverlays().add(latLonGridlineOverlay2);
-
-        RotationGestureOverlay rotationGestureOverlay = new RotationGestureOverlay(getApplicationContext(), mapView);
-        rotationGestureOverlay.setEnabled(true);
-        mapView.getOverlays().add(rotationGestureOverlay);
-
-        /*InternalCompassOrientationProvider internalCompassOrientationProvider = new InternalCompassOrientationProvider(getApplicationContext());
-        CompassOverlay compassOverlay = new CompassOverlay(getApplicationContext(), internalCompassOrientationProvider, mapView);
-        compassOverlay.enableCompass();
-        mapView.getOverlays().add(compassOverlay);*/
-
-        /*CompassOverlay compassOverlay = new CompassOverlay(getApplicationContext(), mapView);
-        compassOverlay.setPointerMode(false);
-        compassOverlay.enableCompass();
-        mapView.getOverlayManager().add(compassOverlay);
-        mapView.invalidate();*/
-
-        MyLocationNewOverlay myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()), mapView);
-        myLocationNewOverlay.enableMyLocation();
-        mapView.getOverlays().add(myLocationNewOverlay);
-
-        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
-        ScaleBarOverlay scaleBarOverlay = new ScaleBarOverlay(mapView);
-        scaleBarOverlay.setCentred(true);
-        scaleBarOverlay.setScaleBarOffset(displayMetrics.widthPixels/2, 10);
-        mapView.getOverlays().add(scaleBarOverlay);
-
-        MinimapOverlay minimapOverlay = new MinimapOverlay(getApplicationContext(), mapView.getTileRequestCompleteHandler());
-        minimapOverlay.setWidth(displayMetrics.widthPixels/5);
-        minimapOverlay.setHeight(displayMetrics.heightPixels/5);
-        minimapOverlay.setTileSource(TileSourceFactory.WIKIMEDIA);
-        mapView.getOverlays().add(minimapOverlay);
 
         ArrayList<OverlayItem> items = new ArrayList<>();
         items.add(new OverlayItem("Title" ,"Description", new GeoPoint(25.05300d, 121.47300d)));
@@ -144,26 +111,31 @@ public class Example3Activity extends AppCompatActivity {
 
         Paint pointStyle = new Paint();
         pointStyle.setColor(Color.parseColor("#00ff00"));
+        //pointStyle.setStrokeWidth(10.0f);
 
         SimpleFastPointOverlayOptions simpleFastPointOverlayOptions = SimpleFastPointOverlayOptions.getDefaultStyle()
                 .setAlgorithm(SimpleFastPointOverlayOptions.RenderingAlgorithm.MAXIMUM_OPTIMIZATION)
-                .setRadius(7)
+                .setRadius(15)
                 .setIsClickable(true)
                 .setCellSize(15)
-                .setTextStyle(textStyle).setPointStyle(pointStyle);
+                .setTextStyle(textStyle)
+                .setPointStyle(pointStyle);
 
         SimpleFastPointOverlay simpleFastPointOverlay = new SimpleFastPointOverlay(simplePointTheme, simpleFastPointOverlayOptions);
 
         simpleFastPointOverlay.setOnClickListener(new SimpleFastPointOverlay.OnClickListener() {
             @Override
             public void onClick(SimpleFastPointOverlay.PointAdapter points, Integer point) {
-                Toast.makeText(mapView.getContext()
+                Log.i("test" ,"test");
+                Toast.makeText(getApplicationContext()
                         , "You clicked " + ((LabelledGeoPoint) points.get(point)).getLabel()
                         , Toast.LENGTH_SHORT).show();
             }
         });
 
         mapView.getOverlays().add(simpleFastPointOverlay);
+
+        mapView.addMapListener(mapListener);
     }
 
     private MapListener mapListener = new MapListener() {

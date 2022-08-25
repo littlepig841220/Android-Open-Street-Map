@@ -21,6 +21,9 @@
         android:theme="@style/Theme.OpenStreetMap"
         tools:targetApi="31">
         <activity
+            android:name=".Example4Activity"
+            android:exported="false" />
+        <activity
             android:name=".Example3Activity"
             android:exported="false" />
         <activity

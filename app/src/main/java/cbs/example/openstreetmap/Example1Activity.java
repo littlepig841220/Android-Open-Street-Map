@@ -25,7 +25,6 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 public class Example1Activity extends AppCompatActivity {
     private MapView mapView;
-    private IMapController mapController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +42,7 @@ public class Example1Activity extends AppCompatActivity {
         mapView.setMinZoomLevel(3.28d);
         mapView.addMapListener(mapListener);
 
-        mapController = mapView.getController();
+        IMapController mapController = mapView.getController();
         mapController.setZoom(19.0d);//數字越小地圖越小19
 
         GeoPoint startPoint = new GeoPoint(25.05397, 121.47309);

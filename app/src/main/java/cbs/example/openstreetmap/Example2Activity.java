@@ -3,8 +3,11 @@ package cbs.example.openstreetmap;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
@@ -23,9 +26,12 @@ import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-public class Example2Activity extends AppCompatActivity {
+import cbs.example.openstreetmap.tool.APIMethod;
+
+public class Example2Activity extends AppCompatActivity implements MapListener{
     private MapView mapView;
-    private IMapController mapController;
+    private TextView textView;
+    private MyLocationNewOverlay myLocationNewOverlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,47 +40,24 @@ public class Example2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_basic);
 
         mapView = findViewById(R.id.mapView);
-
-        mapView.setTileSource(TileSourceFactory.MAPNIK);
-        mapView.setVerticalMapRepetitionEnabled(false);
-        mapView.setScrollableAreaLimitLatitude(89.9d,-89.9d,0);//45
-        mapView.setMultiTouchControls(true);
-        mapView.setMaxZoomLevel(22.0d);
-        mapView.setMinZoomLevel(3.28d);
-        mapView.addMapListener(mapListener);
-
-        mapController = mapView.getController();
-        mapController.setZoom(19.0d);//數字越小地圖越小19
+        textView = findViewById(R.id.textView5);
 
         GeoPoint startPoint = new GeoPoint(25.05397, 121.47309);
-        mapController.setCenter(startPoint);
 
-        Marker marker = new Marker(mapView);
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        marker.setPosition(startPoint);
-        mapView.getOverlays().add(marker);
+        APIMethod apiMethod = new APIMethod(mapView);
+
+        apiMethod.setMapView();
+        apiMethod.mapController(startPoint);
+        apiMethod.maker(startPoint);
+        apiMethod.rotationGestureOverlay(getApplicationContext());
 
         LatLonGridlineOverlay2 latLonGridlineOverlay2 = new LatLonGridlineOverlay2();
         latLonGridlineOverlay2.setFontSizeDp(Short.parseShort("0"));
         mapView.getOverlays().add(latLonGridlineOverlay2);
 
-        RotationGestureOverlay rotationGestureOverlay = new RotationGestureOverlay(getApplicationContext(), mapView);
-        rotationGestureOverlay.setEnabled(true);
-        mapView.getOverlays().add(rotationGestureOverlay);
-
-        /*InternalCompassOrientationProvider internalCompassOrientationProvider = new InternalCompassOrientationProvider(getApplicationContext());
-        CompassOverlay compassOverlay = new CompassOverlay(getApplicationContext(), internalCompassOrientationProvider, mapView);
-        compassOverlay.enableCompass();
-        mapView.getOverlays().add(compassOverlay);*/
-
-        /*CompassOverlay compassOverlay = new CompassOverlay(getApplicationContext(), mapView);
-        compassOverlay.setPointerMode(false);
-        compassOverlay.enableCompass();
-        mapView.getOverlayManager().add(compassOverlay);
-        mapView.invalidate();*/
-
-        MyLocationNewOverlay myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()), mapView);
+        myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()), mapView);
         myLocationNewOverlay.enableMyLocation();
+        myLocationNewOverlay.runOnFirstFix(new getCurrentLocation(myLocationNewOverlay));
         mapView.getOverlays().add(myLocationNewOverlay);
 
         DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
@@ -88,30 +71,20 @@ public class Example2Activity extends AppCompatActivity {
         minimapOverlay.setHeight(displayMetrics.heightPixels/5);
         minimapOverlay.setTileSource(TileSourceFactory.WIKIMEDIA);
         mapView.getOverlays().add(minimapOverlay);
+
+        mapView.addMapListener(this);
+
+        /*InternalCompassOrientationProvider internalCompassOrientationProvider = new InternalCompassOrientationProvider(getApplicationContext());
+        CompassOverlay compassOverlay = new CompassOverlay(getApplicationContext(), internalCompassOrientationProvider, mapView);
+        compassOverlay.enableCompass();
+        mapView.getOverlays().add(compassOverlay);*/
+
+        /*CompassOverlay compassOverlay = new CompassOverlay(getApplicationContext(), mapView);
+        compassOverlay.setPointerMode(false);
+        compassOverlay.enableCompass();
+        mapView.getOverlayManager().add(compassOverlay);
+        mapView.invalidate();*/
     }
-
-    private MapListener mapListener = new MapListener() {
-        @Override
-        public boolean onScroll(ScrollEvent event) {//移動
-            //int x = event.getX();
-            //int y = event.getY();
-            //Log.i("test", "x:" + x + "y:" + y);
-            return false;
-        }
-
-        @Override
-        public boolean onZoom(ZoomEvent event) {//放大縮小
-            double zoomLevel = event.getSource().getZoomLevelDouble();
-            Log.i("test", "zoom level:" + zoomLevel);
-
-            if (zoomLevel == mapView.getMinZoomLevel()){
-                Toast.makeText(getApplicationContext(), "世界很大，但地圖很小了", Toast.LENGTH_LONG).show();
-            } else if (zoomLevel == mapView.getMaxZoomLevel()){
-                Toast.makeText(getApplicationContext(), "已經很大囉，這樣你會知道的太多", Toast.LENGTH_LONG).show();
-            }
-            return true;
-        }
-    };
 
     public void onResume() {
         super.onResume();
@@ -127,5 +100,59 @@ public class Example2Activity extends AppCompatActivity {
         //Configuration.getInstance().save(this, prefs);
         if (mapView != null)
             mapView.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+    }
+
+    @Override
+    public boolean onScroll(ScrollEvent event) {
+        //int x = event.getX();
+        //int y = event.getY();
+        //Log.i("test", "x:" + x + "y:" + y);
+        return false;
+    }
+
+    @Override
+    public boolean onZoom(ZoomEvent event) {
+        double zoomLevel = event.getSource().getZoomLevelDouble();
+        Log.i("test", "zoom level:" + zoomLevel);
+
+        if (zoomLevel == mapView.getMinZoomLevel()){
+            Toast.makeText(getApplicationContext(), "世界很大，但地圖很小了", Toast.LENGTH_LONG).show();
+        } else if (zoomLevel == mapView.getMaxZoomLevel()){
+            Toast.makeText(getApplicationContext(), "已經很大囉，這樣你會知道的太多", Toast.LENGTH_LONG).show();
+        }
+        return true;
+    }
+
+    class getCurrentLocation implements Runnable{
+        private MyLocationNewOverlay myLocationNewOverlay;
+        private Handler handler = new Handler();
+
+        public getCurrentLocation(MyLocationNewOverlay myLocationNewOverlay){
+            this.myLocationNewOverlay = myLocationNewOverlay;
+        }
+
+        @Override
+        public void run() {
+            if (myLocationNewOverlay.getMyLocation() == null){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.setText("Searching...");
+                    }
+                });
+            }else {
+                Log.d("MyTag", String.format("First location fix: %s", myLocationNewOverlay.getMyLocation().toString()));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.setText(String.format("My Location\nLongitude: %s\nLatitude: %s\nAltitude: %s",
+                                myLocationNewOverlay.getMyLocation().getLongitude(),
+                                myLocationNewOverlay.getMyLocation().getLatitude(),
+                                myLocationNewOverlay.getMyLocation().getAltitude()));
+                    }
+                });
+            }
+            handler.postDelayed(this, 1000);
+        }
     }
 }
