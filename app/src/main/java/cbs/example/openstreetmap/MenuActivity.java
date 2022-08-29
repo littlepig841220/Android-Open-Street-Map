@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener{
-    private Button button, button2, button3, button4, button5;
+    private Button button, button2, button3, button4, button5, button6;
     private TextView textView;
 
     @Override
@@ -22,6 +22,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         button3 = findViewById(R.id.button3);
         button4 = findViewById(R.id.button4);
         button5 = findViewById(R.id.button5);
+        button6 = findViewById(R.id.button6);
         textView = findViewById(R.id.textView3);
 
         button.setOnLongClickListener(this);
@@ -29,6 +30,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         button3.setOnLongClickListener(this);
         button4.setOnLongClickListener(this);
         button5.setOnLongClickListener(this);
+        button6.setOnLongClickListener(this);
     }
 
     @Override
@@ -54,6 +56,10 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplicationContext(), Example4Activity.class));
                 break;
             }
+            case R.id.button6 :{
+                startActivity(new Intent(getApplicationContext(), RecordPathActivity.class));
+                break;
+            }
         }
     }
 
@@ -69,7 +75,8 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                         "● Use 'RotationGestureOverlay' can make map rotate.\n" +
                         "● 'Geo Point' can create a Geographic coordinate system and set start point.\n" +
                         "● 'Marker' can create a mark on the map.\n" +
-                        "● 'Map Listener' can watch user moving and zooming on the map.");
+                        "● 'Map Listener' can watch user moving and zooming on the map.\n" +
+                        "● 'MapEventsReceiver' can pic up Geo Point on the map");
                 break;
             }
             case R.id.button3 :{
@@ -84,6 +91,18 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 textView.setText("Add 1 overlay, Overlay Item and more Marker setting.\n" +
                         "● 'OverlayItem' and 'ItemizedOverlayWithFocus' can mark point on the map like marker. But it can set click listener to use other android function.\n" +
                         "● 'simpleFastPointOverlay' can mark a dot on the map. Also cam set on click listener");
+                break;
+            }
+            case R.id.button5 :{
+                textView.setText("Add 2 drawing method and their setting method\n" +
+                        "● 'Polyline' can draw a line on the map\n" +
+                        "● 'Polygon' can draw an area on the map\n" +
+                        "● 'setHoles' in the 'Polygon' can make area have a empty area");
+                break;
+            }
+            case R.id.button6 :{
+                textView.setText("Include all method to make a user GPS recorder. Contact location on the map.");
+                break;
             }
         }
         return true;

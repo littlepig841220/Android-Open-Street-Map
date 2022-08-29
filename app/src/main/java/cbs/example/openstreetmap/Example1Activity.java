@@ -9,12 +9,14 @@ import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
@@ -25,6 +27,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 public class Example1Activity extends AppCompatActivity {
     private MapView mapView;
+    private Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,7 @@ public class Example1Activity extends AppCompatActivity {
         GeoPoint startPoint = new GeoPoint(25.05397, 121.47309);
         mapController.setCenter(startPoint);
 
-        Marker marker = new Marker(mapView);
+        marker = new Marker(mapView);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setPosition(startPoint);
         mapView.getOverlays().add(marker);
@@ -56,6 +59,9 @@ public class Example1Activity extends AppCompatActivity {
         RotationGestureOverlay rotationGestureOverlay = new RotationGestureOverlay(getApplicationContext(), mapView);
         rotationGestureOverlay.setEnabled(true);
         mapView.getOverlays().add(rotationGestureOverlay);
+
+        MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(mapEventsReceiver);
+        mapView.getOverlays().add(mapEventsOverlay);
     }
 
     private MapListener mapListener = new MapListener() {
@@ -78,6 +84,21 @@ public class Example1Activity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "已經很大囉，這樣你會知道的太多", Toast.LENGTH_LONG).show();
             }
             return true;
+        }
+    };
+
+    private MapEventsReceiver mapEventsReceiver = new MapEventsReceiver() {
+        @Override
+        public boolean singleTapConfirmedHelper(GeoPoint p) {
+            marker.setPosition(p);
+
+            Log.i("test", p.toString());
+            return true;
+        }
+
+        @Override
+        public boolean longPressHelper(GeoPoint p) {
+            return false;
         }
     };
 

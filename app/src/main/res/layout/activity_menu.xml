@@ -111,7 +111,8 @@
                 android:layout_weight="1"
                 android:enabled="false"
                 android:onClick="onClick"
-                android:text="button" />
+                android:text="Record path"
+                android:textAllCaps="false" />
         </TableRow>
 
     </TableLayout>
