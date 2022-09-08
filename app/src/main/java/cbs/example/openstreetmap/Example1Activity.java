@@ -26,7 +26,9 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 public class Example1Activity extends AppCompatActivity {
+    //Component declaration
     private MapView mapView;
+    //Element declaration
     private Marker marker;
 
     @Override
@@ -37,6 +39,7 @@ public class Example1Activity extends AppCompatActivity {
 
         mapView = findViewById(R.id.mapView);
 
+        //MapView Setting
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setVerticalMapRepetitionEnabled(false);
         mapView.setScrollableAreaLimitLatitude(89.9d,-89.9d,0);//45
@@ -45,38 +48,57 @@ public class Example1Activity extends AppCompatActivity {
         mapView.setMinZoomLevel(3.28d);
         mapView.addMapListener(mapListener);
 
+        //IMapController method
         IMapController mapController = mapView.getController();
         mapController.setZoom(19.0d);//數字越小地圖越小19
 
+        //GeoPoint method
         GeoPoint startPoint = new GeoPoint(25.05397, 121.47309);
         mapController.setCenter(startPoint);
 
+        //Marker method
         marker = new Marker(mapView);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setPosition(startPoint);
+        marker.setDraggable(true);
+        marker.setOnMarkerDragListener(markerDragListener);
         mapView.getOverlays().add(marker);
 
+        //RotationGestureOverlay method
         RotationGestureOverlay rotationGestureOverlay = new RotationGestureOverlay(getApplicationContext(), mapView);
         rotationGestureOverlay.setEnabled(true);
         mapView.getOverlays().add(rotationGestureOverlay);
 
+        //MapEventsOverlay method
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(mapEventsReceiver);
         mapView.getOverlays().add(mapEventsOverlay);
+    }
+
+    public void onResume() {
+        super.onResume();
+        if (mapView != null)
+            mapView.onResume(); //needed for compass, my location overlays, v6.0.0 and up
+    }
+
+    public void onPause() {
+        super.onPause();
+        if (mapView != null)
+            mapView.onPause();  //needed for compass, my location overlays, v6.0.0 and up
     }
 
     private MapListener mapListener = new MapListener() {
         @Override
         public boolean onScroll(ScrollEvent event) {//移動
-            //int x = event.getX();
-            //int y = event.getY();
-            //Log.i("test", "x:" + x + "y:" + y);
+            int x = event.getX();
+            int y = event.getY();
+            Log.i("OpenStreetMap", "x:" + x + "y:" + y);
             return false;
         }
 
         @Override
         public boolean onZoom(ZoomEvent event) {//放大縮小
             double zoomLevel = event.getSource().getZoomLevelDouble();
-            Log.i("test", "zoom level:" + zoomLevel);
+            Log.i("OpenStreetMap", "zoom level:" + zoomLevel);
 
             if (zoomLevel == mapView.getMinZoomLevel()){
                 Toast.makeText(getApplicationContext(), "世界很大，但地圖很小了", Toast.LENGTH_LONG).show();
@@ -87,12 +109,28 @@ public class Example1Activity extends AppCompatActivity {
         }
     };
 
+    private Marker.OnMarkerDragListener markerDragListener = new Marker.OnMarkerDragListener() {
+        @Override
+        public void onMarkerDrag(Marker marker) {
+
+        }
+
+        @Override
+        public void onMarkerDragEnd(Marker marker) {
+            Toast.makeText(getApplicationContext(), marker.getPosition().toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onMarkerDragStart(Marker marker) {
+
+        }
+    };
+
     private MapEventsReceiver mapEventsReceiver = new MapEventsReceiver() {
         @Override
         public boolean singleTapConfirmedHelper(GeoPoint p) {
             marker.setPosition(p);
-
-            Log.i("test", p.toString());
+            Toast.makeText(getApplicationContext(), p.toString(), Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -101,26 +139,6 @@ public class Example1Activity extends AppCompatActivity {
             return false;
         }
     };
-
-    public void onResume() {
-        super.onResume();
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        if (mapView != null)
-            mapView.onResume(); //needed for compass, my location overlays, v6.0.0 and up
-    }
-
-    public void onPause() {
-        super.onPause();
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().save(this, prefs);
-        if (mapView != null)
-            mapView.onPause();  //needed for compass, my location overlays, v6.0.0 and up
-    }
 }
 
 //https://osmdroid.github.io/osmdroid/Markers,-Lines-and-Polygons.html

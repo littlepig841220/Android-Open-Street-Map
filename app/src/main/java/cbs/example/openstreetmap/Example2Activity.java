@@ -29,8 +29,10 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import cbs.example.openstreetmap.tool.APIMethod;
 
 public class Example2Activity extends AppCompatActivity implements MapListener{
+    //Component declaration
     private MapView mapView;
     private TextView textView;
+    //Element declaration
     private MyLocationNewOverlay myLocationNewOverlay;
 
     @Override
@@ -44,41 +46,48 @@ public class Example2Activity extends AppCompatActivity implements MapListener{
 
         GeoPoint startPoint = new GeoPoint(25.05397, 121.47309);
 
+        //Method already used
         APIMethod apiMethod = new APIMethod(mapView);
-
         apiMethod.setMapView();
         apiMethod.mapController(startPoint);
-        apiMethod.maker(startPoint);
+        apiMethod.maker(startPoint, "Start point", "Start point");
         apiMethod.rotationGestureOverlay(getApplicationContext());
 
+        //LatLonGridlineOverlay2 method
         LatLonGridlineOverlay2 latLonGridlineOverlay2 = new LatLonGridlineOverlay2();
         latLonGridlineOverlay2.setFontSizeDp(Short.parseShort("0"));
         mapView.getOverlays().add(latLonGridlineOverlay2);
 
+        //MyLocationNewOverlay method
         myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()), mapView);
         myLocationNewOverlay.enableMyLocation();
         myLocationNewOverlay.runOnFirstFix(new getCurrentLocation(myLocationNewOverlay));
         mapView.getOverlays().add(myLocationNewOverlay);
 
+        //DisplayMetrics method
         DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
         ScaleBarOverlay scaleBarOverlay = new ScaleBarOverlay(mapView);
         scaleBarOverlay.setCentred(true);
         scaleBarOverlay.setScaleBarOffset(displayMetrics.widthPixels/2, 10);
         mapView.getOverlays().add(scaleBarOverlay);
 
+        //MinimapOverlay method
         MinimapOverlay minimapOverlay = new MinimapOverlay(getApplicationContext(), mapView.getTileRequestCompleteHandler());
         minimapOverlay.setWidth(displayMetrics.widthPixels/5);
         minimapOverlay.setHeight(displayMetrics.heightPixels/5);
         minimapOverlay.setTileSource(TileSourceFactory.WIKIMEDIA);
         mapView.getOverlays().add(minimapOverlay);
 
+        //Listener
         mapView.addMapListener(this);
 
+        //Failed
         /*InternalCompassOrientationProvider internalCompassOrientationProvider = new InternalCompassOrientationProvider(getApplicationContext());
         CompassOverlay compassOverlay = new CompassOverlay(getApplicationContext(), internalCompassOrientationProvider, mapView);
         compassOverlay.enableCompass();
         mapView.getOverlays().add(compassOverlay);*/
 
+        //Failed
         /*CompassOverlay compassOverlay = new CompassOverlay(getApplicationContext(), mapView);
         compassOverlay.setPointerMode(false);
         compassOverlay.enableCompass();
@@ -104,16 +113,16 @@ public class Example2Activity extends AppCompatActivity implements MapListener{
 
     @Override
     public boolean onScroll(ScrollEvent event) {
-        //int x = event.getX();
-        //int y = event.getY();
-        //Log.i("test", "x:" + x + "y:" + y);
+        int x = event.getX();
+        int y = event.getY();
+        Log.i(APIMethod.TAG, "x:" + x + "y:" + y);
         return false;
     }
 
     @Override
     public boolean onZoom(ZoomEvent event) {
         double zoomLevel = event.getSource().getZoomLevelDouble();
-        Log.i("test", "zoom level:" + zoomLevel);
+        Log.i(APIMethod.TAG, "zoom level:" + zoomLevel);
 
         if (zoomLevel == mapView.getMinZoomLevel()){
             Toast.makeText(getApplicationContext(), "世界很大，但地圖很小了", Toast.LENGTH_LONG).show();
@@ -141,7 +150,7 @@ public class Example2Activity extends AppCompatActivity implements MapListener{
                     }
                 });
             }else {
-                Log.d("MyTag", String.format("First location fix: %s", myLocationNewOverlay.getMyLocation().toString()));
+                Log.d(APIMethod.TAG, String.format("First location fix: %s", myLocationNewOverlay.getMyLocation().toString()));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

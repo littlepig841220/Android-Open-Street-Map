@@ -109,7 +109,7 @@ public class RecordPathActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Log.d("MyTag", String.format("First location fix: %s", myLocationNewOverlay.getMyLocation().toString()));
+                    Log.d(APIMethod.TAG, String.format("First location fix: %s", myLocationNewOverlay.getMyLocation().toString()));
                     geoPoint = myLocationNewOverlay.getMyLocation();
 
                     runOnUiThread(new Runnable() {

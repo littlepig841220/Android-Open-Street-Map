@@ -26,10 +26,12 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import cbs.example.openstreetmap.Example2Activity;
+import cbs.example.openstreetmap.R;
 
 public class APIMethod extends AppCompatActivity {
-    private MapView mapView;
-    private MyLocationNewOverlay myLocationNewOverlay;
+    private static MapView mapView;
+    public static String TAG = "OpenStreetMap";
+
     public APIMethod(MapView mapView){
         this.mapView = mapView;
     }
@@ -48,10 +50,12 @@ public class APIMethod extends AppCompatActivity {
         mapController.setZoom(19.0d);//數字越小地圖越小19
         mapController.setCenter(geoPoint);
     }
-    public void maker(GeoPoint geoPoint){
+    public void maker(GeoPoint geoPoint, String title, String description){
         Marker marker = new Marker(mapView);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setPosition(geoPoint);
+        marker.setTitle(title);
+        marker.setSubDescription(description);
         mapView.getOverlays().add(marker);
     }
 
@@ -68,7 +72,7 @@ public class APIMethod extends AppCompatActivity {
     }
 
     public void myLocationNewOverlay(Context context, TextView textView){
-        myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
+        MyLocationNewOverlay myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
         myLocationNewOverlay.enableMyLocation();
         myLocationNewOverlay.runOnFirstFix(new getCurrentLocation(myLocationNewOverlay, textView));
         mapView.getOverlays().add(myLocationNewOverlay);
@@ -135,7 +139,7 @@ public class APIMethod extends AppCompatActivity {
                     }
                 });
             }else {
-                Log.d("MyTag", String.format("First location fix: %s", myLocationNewOverlay.getMyLocation().toString()));
+                Log.d(TAG, String.format("First location fix: %s", myLocationNewOverlay.getMyLocation().toString()));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

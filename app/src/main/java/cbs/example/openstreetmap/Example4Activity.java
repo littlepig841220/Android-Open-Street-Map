@@ -23,9 +23,9 @@ import java.util.List;
 import cbs.example.openstreetmap.tool.APIMethod;
 
 public class Example4Activity extends AppCompatActivity {
+    //Component declaration
     private MapView mapView;
     private TextView textView;
-    private APIMethod apiMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +36,12 @@ public class Example4Activity extends AppCompatActivity {
         mapView = findViewById(R.id.mapView);
         textView = findViewById(R.id.textView5);
 
+        //Get the required variables
         GeoPoint startPoint = new GeoPoint(25.05397, 121.47309);
         DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
 
-        apiMethod = new APIMethod(mapView);
+        //Method already used
+        APIMethod apiMethod = new APIMethod(mapView);
         apiMethod.setMapView();
         apiMethod.mapController(startPoint);
         apiMethod.rotationGestureOverlay(getApplicationContext());
@@ -48,8 +50,8 @@ public class Example4Activity extends AppCompatActivity {
         apiMethod.scaleBarOverlay(displayMetrics);
         apiMethod.minimapOverlay(getApplicationContext(), displayMetrics);
 
+        //Polyline method
         List<GeoPoint> geoPoints = new ArrayList<>();
-
         geoPoints.add(new GeoPoint(25.05400d, 121.47300d));
         geoPoints.add(new GeoPoint(25.05200d, 121.47100d));
 
@@ -64,8 +66,8 @@ public class Example4Activity extends AppCompatActivity {
         });
         mapView.getOverlayManager().add(polyline);
 
+        //Polygon method
         List<GeoPoint> points = new ArrayList<>();
-
         points.add(new GeoPoint(25.05300d, 121.47300d));
         points.add(new GeoPoint(25.05100d, 121.47100d));
         points.add(new GeoPoint(25.05100d, 121.47300d));

@@ -52,6 +52,7 @@
                 android:layout_weight="1"
                 android:enabled="true"
                 android:onClick="onClick"
+                android:tag="button"
                 android:text="Basic"
                 android:textAllCaps="false" />
 
@@ -62,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onClick"
+                android:tag="button2"
                 android:text="Example 1"
                 android:textAllCaps="false" />
 
@@ -73,6 +75,7 @@
                 android:layout_weight="1"
                 android:enabled="true"
                 android:onClick="onClick"
+                android:tag="button3"
                 android:text="Example 2"
                 android:textAllCaps="false" />
         </TableRow>
@@ -89,6 +92,7 @@
                 android:layout_weight="1"
                 android:enabled="true"
                 android:onClick="onClick"
+                android:tag="button4"
                 android:text="Example 3"
                 android:textAllCaps="false" />
 
@@ -100,6 +104,7 @@
                 android:layout_weight="1"
                 android:enabled="true"
                 android:onClick="onClick"
+                android:tag="button5"
                 android:text="Example 4"
                 android:textAllCaps="false" />
 
@@ -111,6 +116,7 @@
                 android:layout_weight="1"
                 android:enabled="false"
                 android:onClick="onClick"
+                android:tag="button6"
                 android:text="Record path"
                 android:textAllCaps="false" />
         </TableRow>
