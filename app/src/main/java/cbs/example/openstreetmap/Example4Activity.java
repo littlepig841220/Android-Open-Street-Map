@@ -1,17 +1,14 @@
 package cbs.example.openstreetmap;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.osmdroid.config.Configuration;
-import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Polygon;

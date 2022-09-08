@@ -1,6 +1,5 @@
 package cbs.example.openstreetmap.tool;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -8,7 +7,6 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -24,9 +22,6 @@ import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
-
-import cbs.example.openstreetmap.Example2Activity;
-import cbs.example.openstreetmap.R;
 
 public class APIMethod extends AppCompatActivity {
     private static MapView mapView;

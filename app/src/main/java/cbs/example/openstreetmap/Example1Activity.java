@@ -3,7 +3,6 @@ package cbs.example.openstreetmap;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,12 +17,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.MinimapOverlay;
-import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
-import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 public class Example1Activity extends AppCompatActivity {
     //Component declaration

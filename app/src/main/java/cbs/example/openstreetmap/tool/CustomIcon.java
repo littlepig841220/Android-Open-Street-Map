@@ -10,8 +10,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import cbs.example.openstreetmap.R;
 
 public class CustomIcon {
