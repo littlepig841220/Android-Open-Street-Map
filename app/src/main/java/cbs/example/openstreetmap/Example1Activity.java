@@ -31,6 +31,7 @@ public class Example1Activity extends AppCompatActivity {
         Configuration.getInstance().setUserAgentValue("github-glenn1wang-myapp");
         setContentView(R.layout.activity_basic);
 
+        //Component find ID on layout xml.
         mapView = findViewById(R.id.mapView);
 
         //MapView Setting

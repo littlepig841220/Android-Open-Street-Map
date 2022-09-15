@@ -37,9 +37,11 @@ public class Example2Activity extends AppCompatActivity implements MapListener{
         Configuration.getInstance().setUserAgentValue("github-glenn1wang-myapp");
         setContentView(R.layout.activity_basic);
 
+        //Component find ID on layout xml.
         mapView = findViewById(R.id.mapView);
         textView = findViewById(R.id.textView5);
 
+        //Get the required variables
         GeoPoint startPoint = new GeoPoint(25.05397, 121.47309);
 
         //Method already used

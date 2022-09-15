@@ -16,10 +16,13 @@ public class BasicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic);
 
+        //Component find ID on layout xml.
         mapView = findViewById(R.id.mapView);
 
+        //mapView setting
         mapView.setTileSource(TileSourceFactory.MAPNIK);
 
+        //IMapController setting
         IMapController mapController = mapView.getController();
         mapController.setZoom(5.0d);//數字越小地圖越小19
     }
