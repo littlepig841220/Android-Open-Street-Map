@@ -135,6 +135,3 @@ public class Example1Activity extends AppCompatActivity {
         }
     };
 }
-
-//https://osmdroid.github.io/osmdroid/Markers,-Lines-and-Polygons.html
-//http://localhost:63342/pmnabc726c7j819ndjvaa59eh40ubej48ijvz/Open%20Street%20Map/osmdroid-android-6.1.13-javadoc.jar/allclasses.html
