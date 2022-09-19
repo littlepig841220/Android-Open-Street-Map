@@ -24,3 +24,4 @@ In the MenuActivity, can select Class to show example result. CustomIcon.java is
 
 ## Reference
  1. osmdroid - https://osmdroid.github.io/osmdroid/How-to-use-the-osmdroid-library.html
+ 2. JavaDoc - https://osmdroid.github.io/osmdroid/javadocAll/index.html
