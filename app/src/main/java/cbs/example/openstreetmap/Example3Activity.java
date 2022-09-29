@@ -75,7 +75,7 @@ public class Example3Activity extends AppCompatActivity {
         //itemizedOverlayWithFocus method
         ArrayList<OverlayItem> items = new ArrayList<>();
         items.add(new OverlayItem("Title1" ,"Description1", new GeoPoint(25.05300d, 121.47300d)));
-        OverlayItem overlayItem = new OverlayItem("Title2" ,"Description2", new GeoPoint(25.05300d, 121.47250d));
+        OverlayItem overlayItem = new OverlayItem("Title1" ,"Description1", new GeoPoint(25.05300d, 121.47250d));
         overlayItem.setMarker(new BitmapDrawable(customIcon.compositePicture(R.drawable.f18)));
         items.add(overlayItem);//Custom icon
         ItemizedOverlayWithFocus<OverlayItem> itemizedOverlayWithFocus = new ItemizedOverlayWithFocus<OverlayItem>(items,
