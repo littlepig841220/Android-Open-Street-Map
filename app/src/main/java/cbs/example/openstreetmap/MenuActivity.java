@@ -113,3 +113,6 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 }
+
+//https://stackoverflow.com/questions/22250423/osmbonuspack-show-name-of-marker-on-the-map
+//https://stackoverflow.com/questions/51689382/set-icon-on-a-fast-overlay-in-osmdroid
